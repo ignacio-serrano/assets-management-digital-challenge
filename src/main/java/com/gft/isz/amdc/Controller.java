@@ -19,6 +19,7 @@ import com.gft.isz.amdc.model.Location;
 import com.gft.isz.amdc.model.Shop;
 import com.google.maps.errors.ApiException;
 
+/* This lacks of any input validation. */
 @RestController
 public class Controller {
 	
@@ -39,6 +40,7 @@ public class Controller {
     			closestShop = currentShop;
     			closestDistance = DistanceUtils.distHaversineRAD(latitude, longitude, currentShop.getLatitude(), currentShop.getLongitude());
     		} else {
+    			/* I wonder whether there is a method to choose the closest point without actually calculating the distance. */ 
     			double currentDistance = DistanceUtils.distHaversineRAD(latitude, longitude, currentShop.getLatitude(), currentShop.getLongitude());
     			if (currentDistance < closestDistance) {
     				closestShop = currentShop;

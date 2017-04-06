@@ -13,6 +13,7 @@ public class Shop {
 	@JsonProperty("shopAddress")
 	private Address address;
 	
+	/* Latitude and longitude could be in Address, possibly removing the need of ExtendedAddress. */
 	@JsonIgnore
 	private Double latitude;
 	
