@@ -51,4 +51,53 @@ public class Shop {
 		this.longitude = longitude;
 	}
 
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj) {
+			return true;
+		} else if (obj == null) {
+			return false;
+		} else if (obj.getClass() != this.getClass()) {
+			return false;
+		}
+		
+		boolean ret = true;
+		
+		if (obj instanceof Shop) {
+			Shop that = (Shop) obj;
+			if (this.getName() != null) {
+				ret = this.getName().equals(that.getName());
+			} else {
+				ret = that.getName() == null;
+			}
+			
+			if (ret) {
+				if (this.getLatitude() != null) {
+					ret = this.getLatitude().equals(that.getLatitude());
+				} else {
+					ret = that.getLatitude() == null;
+				}
+			}
+			
+			if (ret) {
+				if (this.getLongitude() != null) {
+					ret = this.getLongitude().equals(that.getLongitude());
+				} else {
+					ret = that.getLongitude() == null;
+				}
+			}
+			
+			if (ret) {
+				if (this.getAddress() != null) {
+					ret = this.getAddress().equals(that.getAddress());
+				} else {
+					ret = this.getAddress() == null;
+				}
+			}
+		} else {
+			ret = false;
+		}
+		
+		return ret;
+	}
 }

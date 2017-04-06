@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.gft.isz.amdc.integration.database.Database;
 import com.gft.isz.amdc.integration.geocoding.GeocodingClient;
 import com.gft.isz.amdc.integration.geocoding.Location;
 import com.gft.isz.amdc.model.Shop;
