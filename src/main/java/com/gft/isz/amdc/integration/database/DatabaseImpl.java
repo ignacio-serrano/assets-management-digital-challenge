@@ -1,6 +1,10 @@
 package com.gft.isz.amdc.integration.database;
 
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
 import org.springframework.context.annotation.Scope;
@@ -22,5 +26,18 @@ public class DatabaseImpl implements Database {
 		Shop prev = db.get(shop.getName());
 		db.put(shop.getName(), shop);
 		return prev;
+	}
+
+	@Override
+	public Shop retrieve(String name) {
+		/* Returning the same objects which are stored isn't very robust. With more time I would clone them. */
+		return db.get(name);
+	}
+
+	@Override
+	public Collection<Shop> retrieveAll() {
+		/* Returning the same objects which are stored isn't very robust. With more time I would clone them. */
+		Collection<Shop> shops = db.values();
+		return shops;
 	}
 }

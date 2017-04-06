@@ -19,6 +19,19 @@ public class Shop {
 	@JsonIgnore
 	private Double longitude;
 
+	public Shop() {}
+	
+	public Shop(String name, Address address) {
+		this.name = name;
+		this.address = address;
+	}
+	
+	public Shop(String name, Address address, Double latitude, Double longitude) {
+		this(name, address);
+		this.latitude = latitude;
+		this.longitude = longitude;
+	}
+	
 	public String getName() {
 		return name;
 	}

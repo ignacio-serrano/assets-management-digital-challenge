@@ -1,37 +1,15 @@
 package com.gft.isz.amdc;
 
-import static org.hamcrest.CoreMatchers.allOf;
-import static org.hamcrest.CoreMatchers.containsString;
 import static org.hamcrest.CoreMatchers.equalTo;
-import static org.hamcrest.CoreMatchers.hasItem;
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.CoreMatchers.not;
-import static org.hamcrest.CoreMatchers.notNullValue;
-import static org.hamcrest.CoreMatchers.nullValue;
-import static org.hamcrest.Matchers.array;
-import static org.hamcrest.Matchers.containsInAnyOrder;
-import static org.hamcrest.beans.HasPropertyWithValue.hasProperty;
-import static org.hamcrest.beans.SamePropertyValuesAs.samePropertyValuesAs;
-import static org.hamcrest.collection.IsEmptyCollection.empty;
-import static org.hamcrest.collection.IsIterableContainingInOrder.contains;
-import static org.hamcrest.collection.IsIterableWithSize.iterableWithSize;
-import static org.hamcrest.collection.IsMapContaining.hasEntry;
-import static org.hamcrest.core.IsInstanceOf.instanceOf;
-import static org.hamcrest.text.IsEmptyString.isEmptyOrNullString;
-import static org.junit.Assert.assertThat;
+import static org.mockito.Matchers.any;
+import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-import static org.mockito.Matchers.any;
-import static org.mockito.Matchers.argThat;
-import static org.mockito.Matchers.eq;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.when;
 
-import org.junit.Ignore;
+import java.util.Arrays;
+
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -42,10 +20,12 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.ObjectWriter;
 import com.gft.isz.amdc.integration.database.Database;
 import com.gft.isz.amdc.integration.geocoding.GeocodingClient;
-import com.gft.isz.amdc.integration.geocoding.Location;
 import com.gft.isz.amdc.model.Address;
+import com.gft.isz.amdc.model.ExtendedAddress;
+import com.gft.isz.amdc.model.Location;
 import com.gft.isz.amdc.model.Shop;
 
 @RunWith(SpringRunner.class)
@@ -64,13 +44,26 @@ public class ControllerTest {
 	@MockBean
 	private GeocodingClient geoClient;
 	
-	private ObjectMapper mapper = new ObjectMapper();
+	private final ObjectWriter writer = new ObjectMapper().writer();
+	
 
 	@Test
-	public void tdd() throws Exception {
-		mvc.perform(MockMvcRequestBuilders.get("/shops").param("latitude", "50.3471439").param("longitude", "-4.2186718").accept(MediaType.APPLICATION_JSON))
+	public void getShops() throws Exception {
+		
+		when(database.retrieveAll()).thenReturn(Arrays.asList(new Shop[]{
+				new Shop("Pet shop", new Address("10", "PL101AA"), 50.3471439, -4.2186718),
+				new Shop("Book store", new Address("27", "PL23BZ"), 50.3860506, -4.1567181),
+		}));
+		
+    	ExtendedAddress expectedAddress = new ExtendedAddress();
+    	expectedAddress.setNumber("27");
+    	expectedAddress.setPostCode("PL23BZ");
+    	expectedAddress.setLocation(new Location(50.3860506, -4.1567181));
+		
+		mvc.perform(MockMvcRequestBuilders.get("/shops").accept(MediaType.APPLICATION_JSON)
+				.param("latitude", "50.3860505").param("longitude", "-4.1567180"))
 			.andExpect(status().isOk())
-			.andExpect(content().string(equalTo("50.3471439,-4.2186718")));
+			.andExpect(content().json(writer.writeValueAsString(expectedAddress)));
 	}
 	
 	@Test
@@ -82,7 +75,7 @@ public class ControllerTest {
 		shop.setName("Pet shop");
 		shop.setAddress(new Address("1", TEST_POST_CODE));
 		mvc.perform(MockMvcRequestBuilders.post("/shops").contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON)
-				.content(mapper.writer().writeValueAsString(shop)))
+				.content(writer.writeValueAsString(shop)))
 			.andExpect(status().isOk())
 			.andExpect(content().string(equalTo("")));
 		
