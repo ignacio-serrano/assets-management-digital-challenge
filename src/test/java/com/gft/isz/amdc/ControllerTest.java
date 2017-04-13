@@ -24,7 +24,6 @@ import com.fasterxml.jackson.databind.ObjectWriter;
 import com.gft.isz.amdc.integration.database.Database;
 import com.gft.isz.amdc.integration.geocoding.GeocodingClient;
 import com.gft.isz.amdc.model.Address;
-import com.gft.isz.amdc.model.ExtendedAddress;
 import com.gft.isz.amdc.model.Location;
 import com.gft.isz.amdc.model.Shop;
 
@@ -52,14 +51,15 @@ public class ControllerTest {
 	public void getShops() throws Exception {
 		
 		when(database.retrieveAll()).thenReturn(Arrays.asList(new Shop[]{
-				new Shop("Pet shop", new Address("10", "PL101AA"), 50.3471439, -4.2186718),
-				new Shop("Book store", new Address("27", "PL23BZ"), 50.3860506, -4.1567181),
+				new Shop("Pet shop", new Address("10", "PL101AA", 50.3471439, -4.2186718)),
+				new Shop("Book store", new Address("27", "PL23BZ", 50.3860506, -4.1567181)),
 		}));
 		
-    	ExtendedAddress expectedAddress = new ExtendedAddress();
+		Address expectedAddress = new Address();
     	expectedAddress.setNumber("27");
     	expectedAddress.setPostCode("PL23BZ");
-    	expectedAddress.setLocation(new Location(50.3860506, -4.1567181));
+    	expectedAddress.setLatitude(50.3860506);
+    	expectedAddress.setLongitude(-4.1567181);
 		
 		mvc.perform(MockMvcRequestBuilders.get("/shops").accept(MediaType.APPLICATION_JSON)
 				.param("latitude", "50.3860505").param("longitude", "-4.1567180"))

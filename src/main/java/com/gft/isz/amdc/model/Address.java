@@ -1,16 +1,25 @@
 package com.gft.isz.amdc.model;
 
+import org.hibernate.validator.constraints.NotEmpty;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Address {
 
+	@NotEmpty
 	@JsonProperty("number")
 	private String number;
 
+	@NotEmpty
 	@JsonProperty("postCode")
 	private String postCode;
+
+	private Double latitude;
+	
+	private Double longitude;
 
 	public Address() {
 	}
@@ -19,7 +28,13 @@ public class Address {
 		this.number = number;
 		this.postCode = postCode;
 	}
-	
+
+	public Address(String number, String postCode, Double latitude, Double longitude) {
+		this(number, postCode);
+		this.latitude = latitude;
+		this.longitude = longitude;
+	}
+		
 	public String getNumber() {
 		return number;
 	}
@@ -34,6 +49,22 @@ public class Address {
 
 	public void setPostCode(String postCode) {
 		this.postCode = postCode;
+	}
+
+	public Double getLatitude() {
+		return latitude;
+	}
+
+	public void setLatitude(Double latitude) {
+		this.latitude = latitude;
+	}
+
+	public Double getLongitude() {
+		return longitude;
+	}
+
+	public void setLongitude(Double longitude) {
+		this.longitude = longitude;
 	}
 
 	@Override
@@ -63,6 +94,22 @@ public class Address {
 					ret = that.getPostCode() == null;
 				}
 			}
+			if (ret) {
+				if (this.getLatitude() != null) {
+					ret = this.getLatitude().equals(that.getLatitude());
+				} else {
+					ret = that.getLatitude() == null;
+				}
+			}
+			
+			if (ret) {
+				if (this.getLongitude() != null) {
+					ret = this.getLongitude().equals(that.getLongitude());
+				} else {
+					ret = that.getLongitude() == null;
+				}
+			}
+			
 		} else {
 			ret = false;
 		}

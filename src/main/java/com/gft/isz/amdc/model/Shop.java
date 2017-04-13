@@ -1,5 +1,10 @@
 package com.gft.isz.amdc.model;
 
+import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
+
+import org.hibernate.validator.constraints.NotEmpty;
+
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -8,29 +13,19 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 public class Shop {
 	
 	@JsonProperty("shopName")
+	@NotEmpty
 	private String name;
 	
 	@JsonProperty("shopAddress")
+	@NotNull
+	@Valid
 	private Address address;
 	
-	/* Latitude and longitude could be in Address, possibly removing the need of ExtendedAddress. */
-	@JsonIgnore
-	private Double latitude;
-	
-	@JsonIgnore
-	private Double longitude;
-
 	public Shop() {}
 	
 	public Shop(String name, Address address) {
 		this.name = name;
 		this.address = address;
-	}
-	
-	public Shop(String name, Address address, Double latitude, Double longitude) {
-		this(name, address);
-		this.latitude = latitude;
-		this.longitude = longitude;
 	}
 	
 	public String getName() {
@@ -47,22 +42,6 @@ public class Shop {
 
 	public void setAddress(Address address) {
 		this.address = address;
-	}
-
-	public Double getLatitude() {
-		return latitude;
-	}
-
-	public void setLatitude(Double latitude) {
-		this.latitude = latitude;
-	}
-
-	public Double getLongitude() {
-		return longitude;
-	}
-
-	public void setLongitude(Double longitude) {
-		this.longitude = longitude;
 	}
 
 	@Override
@@ -83,22 +62,6 @@ public class Shop {
 				ret = this.getName().equals(that.getName());
 			} else {
 				ret = that.getName() == null;
-			}
-			
-			if (ret) {
-				if (this.getLatitude() != null) {
-					ret = this.getLatitude().equals(that.getLatitude());
-				} else {
-					ret = that.getLatitude() == null;
-				}
-			}
-			
-			if (ret) {
-				if (this.getLongitude() != null) {
-					ret = this.getLongitude().equals(that.getLongitude());
-				} else {
-					ret = that.getLongitude() == null;
-				}
 			}
 			
 			if (ret) {
