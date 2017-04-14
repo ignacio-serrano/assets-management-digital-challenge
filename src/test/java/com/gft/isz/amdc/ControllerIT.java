@@ -53,7 +53,7 @@ public class ControllerIT {
     		}
     	}
     	if (!statusAssertion) {
-    		throw new AssertionError("Reponse status code wasn't in: " + anyOf);
+    		throw new AssertionError("Response status code wasn't in: " + anyOf);
     	}
     	return response.getBody();
     }
@@ -81,7 +81,7 @@ public class ControllerIT {
     		}
     	}
     	if (!statusAssertion) {
-    		throw new AssertionError("Reponse status code wasn't in: " + anyOf);
+    		throw new AssertionError("Response status code wasn't in: " + anyOf);
     	}
     	
     	return response.getBody();

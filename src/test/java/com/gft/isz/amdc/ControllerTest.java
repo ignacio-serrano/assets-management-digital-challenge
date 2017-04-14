@@ -27,7 +27,6 @@ import com.gft.isz.amdc.model.Address;
 import com.gft.isz.amdc.model.Location;
 import com.gft.isz.amdc.model.Shop;
 
-/* This needs tests for error scenarios. */
 @RunWith(SpringRunner.class)
 @SpringBootTest
 @AutoConfigureMockMvc
