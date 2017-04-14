@@ -41,7 +41,6 @@ public class ErrorAdvice {
 		Map<String, Object> ret = new HashMap<>();
 		List<String> errorMessages = new ArrayList<>();
 		for (FieldError fe : e.getBindingResult().getFieldErrors()) {
-			System.out.println("Trial: " + fe.getObjectName() + "." + fe.getField() + " " + fe.getDefaultMessage());
 			errorMessages.add(fe.getObjectName() + "." + fe.getField() + " " + fe.getDefaultMessage());
 		}
 		ret.put("errors", errorMessages);
