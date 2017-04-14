@@ -28,7 +28,6 @@ import org.springframework.web.util.UriComponentsBuilder;
 import com.gft.isz.amdc.model.Address;
 import com.gft.isz.amdc.model.Shop;
 
-/* This needs tests for error scenarios. */
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class ControllerIT {
