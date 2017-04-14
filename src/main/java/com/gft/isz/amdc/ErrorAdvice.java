@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import javax.validation.ConstraintViolation;
 import javax.validation.ConstraintViolationException;
@@ -25,9 +24,9 @@ public class ErrorAdvice {
 	@ResponseBody
 	public Map<String, Object> handle(ConstraintViolationException e) {
 		Map<String, Object> ret = new HashMap<>();
-		Set<ConstraintViolation<?>> constraintViolations = e.getConstraintViolations();
 		List<String> errorMessages = new ArrayList<>();
-		for (ConstraintViolation<?> cv : constraintViolations) {
+		
+		for (ConstraintViolation<?> cv : e.getConstraintViolations()) {
 			errorMessages.add(cv.getPropertyPath().toString() + " " + cv.getMessage() + ". Was " + cv.getInvalidValue());
 		}
 		ret.put("errors", errorMessages);
