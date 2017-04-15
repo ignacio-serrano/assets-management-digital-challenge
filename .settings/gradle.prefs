@@ -3,9 +3,9 @@
     "project_path": ":",
     "project_dir": "C:\\proyectos\\data\\eWorkspaces\\eclipse-mars-2-workspace\\assets-management-digital-challenge",
     "connection_project_dir": "C:\\proyectos\\data\\eWorkspaces\\eclipse-mars-2-workspace\\assets-management-digital-challenge",
-    "connection_gradle_user_home": null,
-    "connection_gradle_distribution": "GRADLE_DISTRIBUTION(VERSION(2.4))",
-    "connection_java_home": null,
+    "connection_gradle_user_home": "C:\\proyectos\\software\\gradle-3.4.1",
+    "connection_gradle_distribution": "GRADLE_DISTRIBUTION(VERSION(3.4.1))",
+    "connection_java_home": "C:\\proyectos\\JDKs\\jdk1.8.0_92x64",
     "connection_jvm_arguments": "",
     "connection_arguments": ""
   }

@@ -22,10 +22,8 @@ public class DatabaseImpl implements Database {
 	private Map<String, Shop> db = new ConcurrentHashMap<>();
 	
 	@Override
-	public Shop save(Shop shop) {
-		Shop prev = db.get(shop.getName());
+	public void save(Shop shop) {
 		db.put(shop.getName(), shop);
-		return prev;
 	}
 
 	@Override

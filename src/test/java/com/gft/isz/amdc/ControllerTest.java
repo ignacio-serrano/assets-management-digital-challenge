@@ -69,7 +69,7 @@ public class ControllerTest {
 	@Test
 	public void postShops_OK_EmptyDB() throws Exception {
 		when(geoClient.getLocation(TEST_POST_CODE)).thenReturn(new Location(50.3471439, -4.2186718));
-		when(database.save(any(Shop.class))).thenReturn(null);
+		when(database.retrieve(any(String.class))).thenReturn(null);
 		
 		Shop shop = new Shop();
 		shop.setName("Pet shop");

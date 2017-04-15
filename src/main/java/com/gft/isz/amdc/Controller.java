@@ -32,8 +32,8 @@ public class Controller {
 	private Database database;
 	
 	@Autowired
-	private GeocodingClient geoClient;
-
+	private Enrichener enrichener;
+	
     @RequestMapping(value = "/shops", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     public Address getShops(@Min(-180) @Max(180) @RequestParam(value="latitude") double latitude, 
     		@Min(-180) @Max(180) @RequestParam(value="longitude") double longitude) {
@@ -64,13 +64,12 @@ public class Controller {
     
     @RequestMapping(value = "/shops", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
     public Shop postShops(@Valid @RequestBody Shop shop) throws ApiException, InterruptedException, IOException {
-    	Address shopAddress = shop.getAddress();
-    	Location location = geoClient.getLocation(shopAddress.getPostCode());
-
-    	shopAddress.setLatitude(location.latitude);
-    	shopAddress.setLongitude(location.longitude);
+    	Shop previousShop = database.retrieve(shop.getName());
+        database.save(shop);
+        
+    	enrichener.enrich(shop);
     	
-        return database.save(shop);
+        return previousShop;
     }
 
 }

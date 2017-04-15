@@ -9,6 +9,7 @@ import static org.junit.Assert.assertThat;
 
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -111,7 +112,7 @@ public class ControllerIT {
     
     @Test
     @DirtiesContext(methodMode = DirtiesContext.MethodMode.AFTER_METHOD)
-    public void postThenGet_OK() {
+    public void postThenGet_OK() throws InterruptedException {
     	Shop request1 = new Shop();
     	request1.setName("Pet shop");
     	request1.setAddress(new Address("1", "PL101AA"));
@@ -120,6 +121,7 @@ public class ControllerIT {
     	
     	assertThat(response1, is(nullValue()));
     	
+    	TimeUnit.SECONDS.sleep(2);
     	Address responseBody = doGetAndAssertOK(50.3471439, -4.2186718);
     	assertThat(responseBody, is(notNullValue()));
     	assertThat(responseBody.getNumber(), is("1"));
