@@ -12,7 +12,7 @@ import org.springframework.stereotype.Component;
 
 import com.gft.isz.amdc.model.Shop;
 
-@Component
+@Component("map")
 /* Not really needed as it is the default scope. */
 @Scope("singleton")
 public class DatabaseImpl implements Database {

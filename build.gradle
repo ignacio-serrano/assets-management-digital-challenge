@@ -38,6 +38,9 @@ dependencies {
     compile("com.google.maps:google-maps-services:0.1.18")
     compile("org.locationtech.spatial4j:spatial4j:0.6")
     compile("org.hibernate:hibernate-validator")
+    compile("com.couchbase.lite:couchbase-lite-java:1.4.0")
+    compile("com.couchbase.lite:couchbase-lite-java-sqlcipher:1.4.0")
+    compile("com.couchbase.lite:couchbase-lite-java-forestdb:1.4.0")
     
     testCompile("junit:junit")
 	testCompile("org.springframework.boot:spring-boot-starter-test")
