@@ -19,7 +19,9 @@ import com.gft.isz.amdc.model.Shop;
 public class DatabaseImpl implements Database {
 	
 	/* According to the specification this will do, but for a real application
-	 * I would have used Redis, MongoDB or CouchDB (see branch feature/couchbase). */
+	 * I would have used Redis, MongoDB or CouchDB (see branch feature/couchbase). 
+	 * Current implementation only allows running an instance of the service 
+	 * and data is lost when the service is shutdown. */
 	private Map<String, Shop> db = new ConcurrentHashMap<>();
 	
 	@Override

@@ -20,6 +20,7 @@ import com.gft.isz.amdc.model.Address;
 import com.gft.isz.amdc.model.Shop;
 import com.google.maps.errors.ApiException;
 
+/* Not much to comment on this class. I'm using JSR-303 (Bean Validator) to check input values. */
 @Validated
 @RestController
 public class Controller {

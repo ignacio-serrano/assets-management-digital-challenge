@@ -21,6 +21,10 @@ import com.google.maps.errors.ApiException;
 import com.google.maps.model.GeocodingResult;
 import com.google.maps.model.LatLng;
 
+/* There are many ways to interact with Google Maps. RestTemplate would have 
+ * been my choice if I hadn't found an already tested client. Anyway, it's 
+ * hidden behind this class just in case a better method appears (substitution
+ * will be less intrusive). */
 @Component
 public class GeocodingClientImpl implements GeocodingClient {
 	
@@ -29,6 +33,9 @@ public class GeocodingClientImpl implements GeocodingClient {
 	@Autowired
 	private ExecutorService executorService;
 	
+	/* I wrote this method before making the call asynchronous. I chose to 
+	 * keep it to separate concerns and because in further developments it may 
+	 * be necessary to synchronously call Google Maps. */
 	@Override
 	public Location getLocation(String postCode) throws ApiException, InterruptedException, IOException {
 		GeocodingResult[] results =  GeocodingApi.geocode(GA_CONTEXT, postCode).await();
@@ -36,6 +43,11 @@ public class GeocodingClientImpl implements GeocodingClient {
 		return new Location(location.lat, location.lng);
 	}
 
+	/* This is an asynchronous version of the former method. It could be done 
+	 * the same using the "setCallback" method on Google Maps client but the 
+	 * wording said that you "pay a lot of attention to producing thread-safe code"
+	 * and I thought this was the best chance in the challenge to demonstrate 
+	 * multi-threading knowledge. */
 	@Override
 	public void getLocationAsync(String postCode, Callback callback) {
 		executorService.submit(new Runnable() {

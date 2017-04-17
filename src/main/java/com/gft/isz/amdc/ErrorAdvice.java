@@ -16,10 +16,17 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 
 import com.gft.isz.amdc.model.Error;
 
-/* This class could use some logging. */
+/* This class takes care of producing, when possible, a meaningful output in 
+ * case of error. Not returning Java stack traces to the consumer also helps
+ * keeping the application safe, since stack traces are clear hints of the 
+ * technologies involved in the service (and their unfixed security issues).
+ * With more time I would log all errors, and will also cover more types
+ * of errors (currently only validation errors are covered). */
 @ControllerAdvice
 public class ErrorAdvice {
 	
+	/* This handles validation errors in complex method parameters such as 
+	 * those coming from POST request bodies. */
 	@ExceptionHandler
 	@ResponseStatus(HttpStatus.BAD_REQUEST)
 	@ResponseBody
@@ -33,6 +40,8 @@ public class ErrorAdvice {
 		return new Error(errorMessages);
 	}
 	
+	/* This handles validation errors in simple method parameters such as 
+	 * those coming from GET requests (request and URI parameters). */
 	@ExceptionHandler
 	@ResponseStatus(HttpStatus.BAD_REQUEST)
 	@ResponseBody
