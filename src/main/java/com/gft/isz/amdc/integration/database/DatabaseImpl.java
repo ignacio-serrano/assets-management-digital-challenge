@@ -39,9 +39,9 @@ public class DatabaseImpl implements Database {
 	public Collection<Shop> retrieveAll() {
 		Collection<Shop> shops = db.values();
 		Set<Shop> ret = new HashSet<>(shops.size());
-		shops.forEach(shop -> {
+		for (Shop shop : shops) {
 			ret.add((Shop) shop.clone());
-		});
+		}
 		return ret;
 	}
 }

@@ -15,7 +15,7 @@ public class Application {
         SpringApplication.run(Application.class, args);
     }
 
-    @Bean
+    @Bean(destroyMethod = "shutdown")
     public ExecutorService executorService() {
        return Executors.newFixedThreadPool(10);
     }
