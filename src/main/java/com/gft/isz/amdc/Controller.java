@@ -20,7 +20,6 @@ import org.springframework.web.bind.annotation.RestController;
 import com.gft.isz.amdc.integration.database.Database;
 import com.gft.isz.amdc.integration.geocoding.GeocodingClient;
 import com.gft.isz.amdc.model.Address;
-import com.gft.isz.amdc.model.Location;
 import com.gft.isz.amdc.model.Shop;
 import com.google.maps.errors.ApiException;
 
@@ -32,9 +31,9 @@ public class Controller {
 	private Database database;
 	
 	@Autowired
-	private Enrichener enrichener;
-	
-    @RequestMapping(value = "/shops", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+	private GeocodingClient geoClient;
+
+	@RequestMapping(value = "/shops", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     public Address getShops(@Min(-180) @Max(180) @RequestParam(value="latitude") double latitude, 
     		@Min(-180) @Max(180) @RequestParam(value="longitude") double longitude) {
     	Collection<Shop> shops = database.retrieveAll();
@@ -67,7 +66,12 @@ public class Controller {
     	Shop previousShop = database.retrieve(shop.getName());
         database.save(shop);
         
-    	enrichener.enrich(shop);
+    	geoClient.getLocationAsync(shop.getAddress().getPostCode(), location -> {
+    		Address shopAddress = shop.getAddress();
+	    	shopAddress.setLatitude(location.latitude);
+	    	shopAddress.setLongitude(location.longitude);
+			database.save(shop);
+    	});
     	
         return previousShop;
     }

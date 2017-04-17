@@ -81,4 +81,18 @@ public class ControllerTest {
 		
 	}
 
+	@Test
+	public void postShops_ERR_SomethingUnexpected() throws Exception {
+		when(geoClient.getLocation(TEST_POST_CODE)).thenReturn(new Location(50.3471439, -4.2186718));
+		when(database.retrieve(any(String.class))).thenThrow(new RuntimeException("Something unexpected happened."));
+		
+		Shop shop = new Shop();
+		shop.setName("Pet shop");
+		shop.setAddress(new Address("1", TEST_POST_CODE));
+		mvc.perform(MockMvcRequestBuilders.post("/shops").contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON)
+				.content(writer.writeValueAsString(shop)))
+			.andExpect(status().is(500))
+			.andExpect(content().json("{\"errors\": [\"Unknown server error\"]}"));
+		
+	}
 }

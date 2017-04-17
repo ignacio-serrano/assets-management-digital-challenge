@@ -10,7 +10,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class Shop {
+public class Shop implements Cloneable {
 	
 	@JsonProperty("shopName")
 	@NotEmpty
@@ -76,5 +76,19 @@ public class Shop {
 		}
 		
 		return ret;
+	}
+	
+	@Override
+	public Object clone() {
+		Shop clone;
+		try {
+			clone = (Shop) super.clone();
+		} catch (CloneNotSupportedException e) {
+			/* This can't actually happen unless someone changes base class. If that's the case,
+			 * better warn the programmer. */
+			throw new RuntimeException("Did you forget to override clone() in base class?", e);
+		}
+		clone.address = this.address != null ? (Address) this.address.clone() : null;
+		return clone;
 	}
 }
