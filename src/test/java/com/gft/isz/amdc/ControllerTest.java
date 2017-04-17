@@ -31,68 +31,63 @@ import com.gft.isz.amdc.model.Shop;
 @SpringBootTest
 @AutoConfigureMockMvc
 public class ControllerTest {
-	
+
 	private static final String TEST_POST_CODE = "PL101AA";
-	
+	private static final Shop TEST_SHOP_1 = new Shop("Pet shop", new Address("1", "PL101AA", 50.3471439, -4.2186718));
+	private static final Shop TEST_SHOP_2 = new Shop("Book store", new Address("27", "PL23BZ", 50.3860506, -4.1567181));
+
 	@Autowired
 	private MockMvc mvc;
-	
+
 	@MockBean
-	private Database database;
-	
+	private Database databaseMock;
+
 	@MockBean
-	private GeocodingClient geoClient;
-	
+	private GeocodingClient geoClientMock;
+
 	private final ObjectWriter writer = new ObjectMapper().writer();
-	
 
 	@Test
 	public void getShops() throws Exception {
-		
-		when(database.retrieveAll()).thenReturn(Arrays.asList(new Shop[]{
-				new Shop("Pet shop", new Address("10", "PL101AA", 50.3471439, -4.2186718)),
-				new Shop("Book store", new Address("27", "PL23BZ", 50.3860506, -4.1567181)),
-		}));
-		
+
+		when(databaseMock.retrieveAll())
+				.thenReturn(Arrays.asList(new Shop[] { (Shop) TEST_SHOP_1.clone(), (Shop) TEST_SHOP_2.clone() }));
+
 		Address expectedAddress = new Address();
-    	expectedAddress.setNumber("27");
-    	expectedAddress.setPostCode("PL23BZ");
-    	expectedAddress.setLatitude(50.3860506);
-    	expectedAddress.setLongitude(-4.1567181);
-		
+		expectedAddress.setNumber("27");
+		expectedAddress.setPostCode("PL23BZ");
+		expectedAddress.setLatitude(50.3860506);
+		expectedAddress.setLongitude(-4.1567181);
+
 		mvc.perform(MockMvcRequestBuilders.get("/shops").accept(MediaType.APPLICATION_JSON)
-				.param("latitude", "50.3860505").param("longitude", "-4.1567180"))
-			.andExpect(status().isOk())
-			.andExpect(content().json(writer.writeValueAsString(expectedAddress)));
+				.param("latitude", "50.3860505").param("longitude", "-4.1567180")).andExpect(status().isOk())
+				.andExpect(content().json(writer.writeValueAsString(TEST_SHOP_2.getAddress())));
 	}
-	
+
 	@Test
 	public void postShops_OK_EmptyDB() throws Exception {
-		when(geoClient.getLocation(TEST_POST_CODE)).thenReturn(new Location(50.3471439, -4.2186718));
-		when(database.retrieve(any(String.class))).thenReturn(null);
-		
+		when(geoClientMock.getLocation(TEST_SHOP_1.getAddress().getPostCode())).thenReturn(new Location(TEST_SHOP_1.getAddress().getLatitude(), TEST_SHOP_1.getAddress().getLongitude()));
+		when(databaseMock.retrieve(any(String.class))).thenReturn(null);
+
 		Shop shop = new Shop();
-		shop.setName("Pet shop");
-		shop.setAddress(new Address("1", TEST_POST_CODE));
-		mvc.perform(MockMvcRequestBuilders.post("/shops").contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON)
-				.content(writer.writeValueAsString(shop)))
-			.andExpect(status().isOk())
-			.andExpect(content().string(equalTo("")));
-		
+		shop.setName(TEST_SHOP_1.getName());
+		shop.setAddress(new Address(TEST_SHOP_1.getAddress().getNumber(), TEST_SHOP_1.getAddress().getPostCode()));
+		mvc.perform(MockMvcRequestBuilders.post("/shops").contentType(MediaType.APPLICATION_JSON)
+				.accept(MediaType.APPLICATION_JSON).content(writer.writeValueAsString(shop))).andExpect(status().isOk())
+				.andExpect(content().string(equalTo("")));
 	}
 
 	@Test
 	public void postShops_ERR_SomethingUnexpected() throws Exception {
-		when(geoClient.getLocation(TEST_POST_CODE)).thenReturn(new Location(50.3471439, -4.2186718));
-		when(database.retrieve(any(String.class))).thenThrow(new RuntimeException("Something unexpected happened."));
-		
+		when(databaseMock.retrieve(any(String.class)))
+				.thenThrow(new RuntimeException("Something unexpected happened."));
+
 		Shop shop = new Shop();
 		shop.setName("Pet shop");
 		shop.setAddress(new Address("1", TEST_POST_CODE));
-		mvc.perform(MockMvcRequestBuilders.post("/shops").contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON)
-				.content(writer.writeValueAsString(shop)))
-			.andExpect(status().is(500))
-			.andExpect(content().json("{\"errors\": [\"Unknown server error\"]}"));
-		
+		mvc.perform(MockMvcRequestBuilders.post("/shops").contentType(MediaType.APPLICATION_JSON)
+				.accept(MediaType.APPLICATION_JSON).content(writer.writeValueAsString(shop)))
+				.andExpect(status().is(500)).andExpect(content().json("{\"errors\": [\"Unknown server error\"]}"));
+
 	}
 }
