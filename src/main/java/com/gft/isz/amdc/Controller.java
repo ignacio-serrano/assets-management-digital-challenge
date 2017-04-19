@@ -1,5 +1,8 @@
 package com.gft.isz.amdc;
 
+import static org.springframework.hateoas.mvc.ControllerLinkBuilder.linkTo;
+import static org.springframework.hateoas.mvc.ControllerLinkBuilder.methodOn;
+
 import java.io.IOException;
 
 import javax.validation.Valid;
@@ -19,6 +22,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.gft.isz.amdc.business.ShopsService;
 import com.gft.isz.amdc.model.Address;
+import com.gft.isz.amdc.model.HATEOASAddress;
 import com.gft.isz.amdc.model.Shop;
 import com.google.maps.errors.ApiException;
 
@@ -31,9 +35,13 @@ public class Controller {
 	private ShopsService shopsService;
 
 	@RequestMapping(value = "/shops", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-	public Address getShops(@Min(-180) @Max(180) @RequestParam(value = "latitude") double latitude,
+	public HATEOASAddress getShops(@Min(-180) @Max(180) @RequestParam(value = "latitude") double latitude,
 			@Min(-180) @Max(180) @RequestParam(value = "longitude") double longitude) {
-		return shopsService.retrieveClosestShop(latitude, longitude);
+		Address address = shopsService.retrieveClosestShop(latitude, longitude);
+		HATEOASAddress ret = new HATEOASAddress();
+		ret.setContent(address);
+		ret.add(linkTo(methodOn(Controller.class).getShops(address.getLatitude(), address.getLongitude())).withSelfRel());
+		return ret;
 	}
 
 	@RequestMapping(value = "/shops", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)

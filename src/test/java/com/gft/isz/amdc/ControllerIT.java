@@ -27,6 +27,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import com.gft.isz.amdc.model.Address;
+import com.gft.isz.amdc.model.HATEOASAddress;
 import com.gft.isz.amdc.model.Shop;
 
 @RunWith(SpringRunner.class)
@@ -69,11 +70,11 @@ public class ControllerIT {
 	private Address doGetAndAssertOK(double latitude, double longitude) {
 		UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl("http://localhost:" + port + "/shops")
 				.queryParam("latitude", latitude).queryParam("longitude", longitude);
-		ResponseEntity<Address> response = restTemplate.exchange(builder.toUriString(), HttpMethod.GET, null,
-				Address.class);
+		ResponseEntity<HATEOASAddress> response = restTemplate.exchange(builder.toUriString(), HttpMethod.GET, null,
+				HATEOASAddress.class);
 		assertThat(response.getStatusCode(), is(HttpStatus.OK));
 
-		return response.getBody();
+		return response.getBody().getContent();
 	}
 
 	private Map<String, Object> doGetAndAssertError(double latitude, double longitude, HttpStatus... anyOf) {

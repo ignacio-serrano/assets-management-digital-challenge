@@ -1,10 +1,12 @@
 package com.gft.isz.amdc;
 
 import static org.hamcrest.CoreMatchers.equalTo;
+import static org.hamcrest.CoreMatchers.is;
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 
 import java.util.Arrays;
 
@@ -61,7 +63,10 @@ public class ControllerTest {
 
 		mvc.perform(MockMvcRequestBuilders.get("/shops").accept(MediaType.APPLICATION_JSON)
 				.param("latitude", "50.3860505").param("longitude", "-4.1567180")).andExpect(status().isOk())
-				.andExpect(content().json(writer.writeValueAsString(TEST_SHOP_2.getAddress())));
+				.andExpect(jsonPath("$.content.number", is(TEST_SHOP_2.getAddress().getNumber())))
+				.andExpect(jsonPath("$.content.postCode", is(TEST_SHOP_2.getAddress().getPostCode())))
+				.andExpect(jsonPath("$.content.latitude", is(TEST_SHOP_2.getAddress().getLatitude())))
+				.andExpect(jsonPath("$.content.longitude", is(TEST_SHOP_2.getAddress().getLongitude())));
 	}
 
 	@Test
