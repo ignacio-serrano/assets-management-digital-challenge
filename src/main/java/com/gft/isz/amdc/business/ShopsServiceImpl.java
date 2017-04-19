@@ -26,11 +26,11 @@ public class ShopsServiceImpl implements ShopsService {
 	 * functional differences between both processes) but in this case it saves
 	 * a lot of extra work. */
 	@Override
-	public void createOrUpdate(Shop shop) throws ApiException, InterruptedException, IOException {
+	public Shop createOrUpdate(Shop shop) throws ApiException, InterruptedException, IOException {
 		
 		/* Shop is saved beforehand so data isn't lost in case Google Maps isn't
 		 * available. */
-		database.save(shop);
+		Shop ret = database.save(shop);
 
 		geoClient.getLocationAsync(shop.getAddress().getPostCode(), location -> {
 			/* This is run asynchronously, so the process can continue
@@ -40,6 +40,8 @@ public class ShopsServiceImpl implements ShopsService {
 			shopAddress.setLongitude(location.longitude);
 			database.save(shop);
 		});
+		
+		return ret;
 	}
 
 	/* The algorithm use to choose the closest shop is to traverse the whole
@@ -77,11 +79,6 @@ public class ShopsServiceImpl implements ShopsService {
 			ret = closestShop.getAddress();
 		}
 		return ret;
-	}
-
-	@Override
-	public Shop retrieveShopByName(String shopName) {
-		return database.retrieve(shopName);
 	}
 
 }

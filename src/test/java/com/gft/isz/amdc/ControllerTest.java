@@ -74,13 +74,13 @@ public class ControllerTest {
 		shop.setName(TEST_SHOP_1.getName());
 		shop.setAddress(new Address(TEST_SHOP_1.getAddress().getNumber(), TEST_SHOP_1.getAddress().getPostCode()));
 		mvc.perform(MockMvcRequestBuilders.post("/shops").contentType(MediaType.APPLICATION_JSON)
-				.accept(MediaType.APPLICATION_JSON).content(writer.writeValueAsString(shop))).andExpect(status().isOk())
+				.accept(MediaType.APPLICATION_JSON).content(writer.writeValueAsString(shop))).andExpect(status().is(201))
 				.andExpect(content().string(equalTo("")));
 	}
 
 	@Test
 	public void postShops_ERR_SomethingUnexpected() throws Exception {
-		when(databaseMock.retrieve(any(String.class)))
+		when(databaseMock.save(any(Shop.class)))
 				.thenThrow(new RuntimeException("Something unexpected happened."));
 
 		Shop shop = new Shop();

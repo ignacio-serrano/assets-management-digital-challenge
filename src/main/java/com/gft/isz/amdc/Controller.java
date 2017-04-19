@@ -7,7 +7,9 @@ import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -35,10 +37,9 @@ public class Controller {
 	}
 
 	@RequestMapping(value = "/shops", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
-	public Shop postShops(@Valid @RequestBody Shop shop) throws ApiException, InterruptedException, IOException {
-		Shop previousShop = shopsService.retrieveShopByName(shop.getName());
-		shopsService.createOrUpdate(shop);
-		return previousShop;
+	public ResponseEntity<Shop> postShops(@Valid @RequestBody Shop shop) throws ApiException, InterruptedException, IOException {
+		Shop previousShop = shopsService.createOrUpdate(shop);
+		return new ResponseEntity<Shop>(previousShop, previousShop == null ? HttpStatus.CREATED : HttpStatus.OK);
 	}
 
 }

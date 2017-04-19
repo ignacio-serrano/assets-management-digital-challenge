@@ -25,10 +25,12 @@ public class DatabaseImpl implements Database {
 	private Map<String, Shop> db = new ConcurrentHashMap<>();
 
 	@Override
-	public void save(Shop shop) {
+	public Shop save(Shop shop) {
+		Shop ret = null;
 		if (shop != null) {
-			db.put(shop.getName(), (Shop) shop.clone());
+			ret = db.put(shop.getName(), (Shop) shop.clone());
 		}
+		return ret;
 	}
 
 	@Override

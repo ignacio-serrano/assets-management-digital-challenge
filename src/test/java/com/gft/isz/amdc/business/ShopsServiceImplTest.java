@@ -52,11 +52,4 @@ public class ShopsServiceImplTest {
 		assertThat(testReturn, is(equalTo(TEST_SHOP_2.getAddress())));
 	}
 
-	@Test
-	public void retrieveShopByName_OK() {
-		when(databaseMock.retrieve(TEST_SHOP_1.getName())).thenReturn(TEST_SHOP_1);
-		Shop testReturn = testTarget.retrieveShopByName(TEST_SHOP_1.getName());
-
-		assertThat(testReturn, is(equalTo(TEST_SHOP_1)));
-	}
 }

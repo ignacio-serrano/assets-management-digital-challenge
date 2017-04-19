@@ -39,11 +39,15 @@ public class ControllerIT {
 	@Autowired
 	private TestRestTemplate restTemplate;
 
-	private Shop doPostAndAssertOK(Shop shop) {
+	private Shop doPostAndAssertOK(Shop shop, HttpStatus status) {
 		ResponseEntity<Shop> response = restTemplate.exchange("http://localhost:" + port + "/shops", HttpMethod.POST,
 				new HttpEntity<Shop>(shop), Shop.class);
-		assertThat(response.getStatusCode(), is(HttpStatus.OK));
+		assertThat(response.getStatusCode(), is(status));
 		return response.getBody();
+	}
+	
+	private Shop doPostAndAssertOK(Shop shop) {
+		return doPostAndAssertOK(shop, HttpStatus.OK);
 	}
 
 	private Map<String, Object> doPostAndAssertError(Shop shop, HttpStatus... anyOf) {
@@ -100,7 +104,7 @@ public class ControllerIT {
 		request1.setName("Pet shop");
 		request1.setAddress(new Address("1", "PL101AA"));
 
-		Shop response1 = doPostAndAssertOK(request1);
+		Shop response1 = doPostAndAssertOK(request1, HttpStatus.CREATED);
 
 		assertThat(response1, is(nullValue()));
 
@@ -121,7 +125,7 @@ public class ControllerIT {
 		request1.setName("Pet shop");
 		request1.setAddress(new Address("1", "PL101AA"));
 
-		Shop response1 = doPostAndAssertOK(request1);
+		Shop response1 = doPostAndAssertOK(request1, HttpStatus.CREATED);
 
 		assertThat(response1, is(nullValue()));
 

@@ -6,7 +6,7 @@ import com.gft.isz.amdc.model.Shop;
 
 public interface Database {
 
-	void save(Shop shop);
+	Shop save(Shop shop);
 
 	Shop retrieve(String name);
 

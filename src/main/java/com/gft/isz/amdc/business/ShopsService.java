@@ -8,10 +8,8 @@ import com.google.maps.errors.ApiException;
 
 public interface ShopsService {
 
-	void createOrUpdate(Shop shop) throws ApiException, InterruptedException, IOException;
+	Shop createOrUpdate(Shop shop) throws ApiException, InterruptedException, IOException;
 
 	Address retrieveClosestShop(double latitude, double longitude);
-
-	Shop retrieveShopByName(String shopName);
 
 }
