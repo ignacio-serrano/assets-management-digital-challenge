@@ -17,12 +17,12 @@ public class Address implements Cloneable {
 	private String postCode;
 
 	private Double latitude;
-	
+
 	private Double longitude;
 
 	public Address() {
 	}
-	
+
 	public Address(String number, String postCode) {
 		this.number = number;
 		this.postCode = postCode;
@@ -33,7 +33,7 @@ public class Address implements Cloneable {
 		this.latitude = latitude;
 		this.longitude = longitude;
 	}
-		
+
 	public String getNumber() {
 		return number;
 	}
@@ -75,9 +75,9 @@ public class Address implements Cloneable {
 		} else if (obj.getClass() != this.getClass()) {
 			return false;
 		}
-		
+
 		boolean ret = true;
-		
+
 		if (obj instanceof Address) {
 			Address that = (Address) obj;
 			if (this.getNumber() != null) {
@@ -85,7 +85,7 @@ public class Address implements Cloneable {
 			} else {
 				ret = that.getNumber() == null;
 			}
-			
+
 			if (ret) {
 				if (this.getPostCode() != null) {
 					ret = this.getPostCode().equals(that.getPostCode());
@@ -100,7 +100,7 @@ public class Address implements Cloneable {
 					ret = that.getLatitude() == null;
 				}
 			}
-			
+
 			if (ret) {
 				if (this.getLongitude() != null) {
 					ret = this.getLongitude().equals(that.getLongitude());
@@ -108,22 +108,22 @@ public class Address implements Cloneable {
 					ret = that.getLongitude() == null;
 				}
 			}
-			
+
 		} else {
 			ret = false;
 		}
-		
+
 		return ret;
 	}
-	
+
 	@Override
 	public Object clone() {
 		Object clone = null;
 		try {
 			clone = super.clone();
 		} catch (CloneNotSupportedException e) {
-			/* This can't actually happen unless someone changes base class. If that's the case,
-			 * better warn the programmer. */
+			/* This can't actually happen unless someone changes base class. If
+			 * that's the case, better warn the programmer. */
 			throw new RuntimeException("Did you forget to override clone() in base class?", e);
 		}
 		return clone;

@@ -24,37 +24,38 @@ import com.gft.isz.amdc.model.Error;
  * of errors (currently only validation errors are covered). */
 @ControllerAdvice
 public class ErrorAdvice {
-	
-	/* This handles validation errors in complex method parameters such as 
-	 * those coming from POST request bodies. */
+
+	/* This handles validation errors in complex method parameters such as those
+	 * coming from POST request bodies. */
 	@ExceptionHandler
 	@ResponseStatus(HttpStatus.BAD_REQUEST)
 	@ResponseBody
 	public Error handle(ConstraintViolationException e) {
 		List<String> errorMessages = new ArrayList<>();
-		
+
 		for (ConstraintViolation<?> cv : e.getConstraintViolations()) {
-			errorMessages.add(cv.getPropertyPath().toString() + " " + cv.getMessage() + ". Was " + cv.getInvalidValue());
+			errorMessages
+					.add(cv.getPropertyPath().toString() + " " + cv.getMessage() + ". Was " + cv.getInvalidValue());
 		}
 
 		return new Error(errorMessages);
 	}
-	
-	/* This handles validation errors in simple method parameters such as 
-	 * those coming from GET requests (request and URI parameters). */
+
+	/* This handles validation errors in simple method parameters such as those
+	 * coming from GET requests (request and URI parameters). */
 	@ExceptionHandler
 	@ResponseStatus(HttpStatus.BAD_REQUEST)
 	@ResponseBody
 	public Error handle(MethodArgumentNotValidException e) {
 		List<String> errorMessages = new ArrayList<>();
-		
+
 		for (FieldError fe : e.getBindingResult().getFieldErrors()) {
 			errorMessages.add(fe.getObjectName() + "." + fe.getField() + " " + fe.getDefaultMessage());
 		}
 
 		return new Error(errorMessages);
 	}
-	
+
 	@ExceptionHandler
 	@ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
 	@ResponseBody

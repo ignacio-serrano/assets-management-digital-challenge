@@ -11,23 +11,24 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Shop implements Cloneable {
-	
+
 	@JsonProperty("shopName")
 	@NotEmpty
 	private String name;
-	
+
 	@JsonProperty("shopAddress")
 	@NotNull
 	@Valid
 	private Address address;
-	
-	public Shop() {}
-	
+
+	public Shop() {
+	}
+
 	public Shop(String name, Address address) {
 		this.name = name;
 		this.address = address;
 	}
-	
+
 	public String getName() {
 		return name;
 	}
@@ -53,9 +54,9 @@ public class Shop implements Cloneable {
 		} else if (obj.getClass() != this.getClass()) {
 			return false;
 		}
-		
+
 		boolean ret = true;
-		
+
 		if (obj instanceof Shop) {
 			Shop that = (Shop) obj;
 			if (this.getName() != null) {
@@ -63,7 +64,7 @@ public class Shop implements Cloneable {
 			} else {
 				ret = that.getName() == null;
 			}
-			
+
 			if (ret) {
 				if (this.getAddress() != null) {
 					ret = this.getAddress().equals(that.getAddress());
@@ -74,18 +75,18 @@ public class Shop implements Cloneable {
 		} else {
 			ret = false;
 		}
-		
+
 		return ret;
 	}
-	
+
 	@Override
 	public Object clone() {
 		Shop clone;
 		try {
 			clone = (Shop) super.clone();
 		} catch (CloneNotSupportedException e) {
-			/* This can't actually happen unless someone changes base class. If that's the case,
-			 * better warn the programmer. */
+			/* This can't actually happen unless someone changes base class. If
+			 * that's the case, better warn the programmer. */
 			throw new RuntimeException("Did you forget to override clone() in base class?", e);
 		}
 		clone.address = this.address != null ? (Address) this.address.clone() : null;

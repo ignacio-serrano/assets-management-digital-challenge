@@ -4,7 +4,7 @@ package com.gft.isz.amdc.model;
  * beans full of getters and setters. */
 public class Location {
 	public final double latitude;
-	
+
 	public final double longitude;
 
 	public Location(double latitude, double longitude) {

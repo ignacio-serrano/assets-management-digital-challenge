@@ -66,7 +66,8 @@ public class ControllerTest {
 
 	@Test
 	public void postShops_OK_EmptyDB() throws Exception {
-		when(geoClientMock.getLocation(TEST_SHOP_1.getAddress().getPostCode())).thenReturn(new Location(TEST_SHOP_1.getAddress().getLatitude(), TEST_SHOP_1.getAddress().getLongitude()));
+		when(geoClientMock.getLocation(TEST_SHOP_1.getAddress().getPostCode())).thenReturn(
+				new Location(TEST_SHOP_1.getAddress().getLatitude(), TEST_SHOP_1.getAddress().getLongitude()));
 		when(databaseMock.retrieve(any(String.class))).thenReturn(null);
 
 		Shop shop = new Shop();

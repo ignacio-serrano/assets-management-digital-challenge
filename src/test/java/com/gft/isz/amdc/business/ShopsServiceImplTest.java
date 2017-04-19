@@ -33,7 +33,7 @@ public class ShopsServiceImplTest {
 
 	@Mock
 	private Database databaseMock;
-	
+
 	@Mock
 	private GeocodingClient geoClientMock;
 
@@ -44,11 +44,11 @@ public class ShopsServiceImplTest {
 
 	@Test
 	public void retrieveClosestShop_OK() {
-		when(databaseMock.retrieveAll()).thenReturn(
-				Arrays.asList(new Shop[] { (Shop) TEST_SHOP_1.clone(), (Shop) TEST_SHOP_2.clone()}));
+		when(databaseMock.retrieveAll())
+				.thenReturn(Arrays.asList(new Shop[] { (Shop) TEST_SHOP_1.clone(), (Shop) TEST_SHOP_2.clone() }));
 
 		Address testReturn = testTarget.retrieveClosestShop(50.3860505, -4.1567180);
-		
+
 		assertThat(testReturn, is(equalTo(TEST_SHOP_2.getAddress())));
 	}
 

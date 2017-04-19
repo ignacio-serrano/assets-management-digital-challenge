@@ -24,21 +24,21 @@ import com.google.maps.errors.ApiException;
 @Validated
 @RestController
 public class Controller {
-	
+
 	@Autowired
 	private ShopsService shopsService;
-	
+
 	@RequestMapping(value = "/shops", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-    public Address getShops(@Min(-180) @Max(180) @RequestParam(value="latitude") double latitude, 
-    		@Min(-180) @Max(180) @RequestParam(value="longitude") double longitude) {
+	public Address getShops(@Min(-180) @Max(180) @RequestParam(value = "latitude") double latitude,
+			@Min(-180) @Max(180) @RequestParam(value = "longitude") double longitude) {
 		return shopsService.retrieveClosestShop(latitude, longitude);
-    }
-    
-    @RequestMapping(value = "/shops", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
-    public Shop postShops(@Valid @RequestBody Shop shop) throws ApiException, InterruptedException, IOException {
-    	Shop previousShop = shopsService.retrieveShopByName(shop.getName());
-    	shopsService.createOrUpdate(shop);
-    	return previousShop;
-    }
+	}
+
+	@RequestMapping(value = "/shops", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
+	public Shop postShops(@Valid @RequestBody Shop shop) throws ApiException, InterruptedException, IOException {
+		Shop previousShop = shopsService.retrieveShopByName(shop.getName());
+		shopsService.createOrUpdate(shop);
+		return previousShop;
+	}
 
 }
